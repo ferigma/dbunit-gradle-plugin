@@ -2,6 +2,8 @@
 
 The DbUnit Gradle Plugin allows you to easily launch [DbUnit](http://dbunit.sourceforge.net) tasks from your gradle project. It is based on the [DbUnit Maven Plugin](http://mojo.codehaus.org/dbunit-maven-plugin/) to provide the same (and more) functionality but simplifying the configuration process.
 
+![Build](https://travis-ci.org/ferigma/dbunit-gradle-plugin.svg?branch=master)
+
 ## Tasks
 
 There are three tasks included in the plugin:
