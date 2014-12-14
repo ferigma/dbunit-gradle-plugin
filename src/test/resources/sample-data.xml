@@ -1,0 +1,39 @@
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+
+<dataset>
+
+	<table name="COURSE">
+		<column>id</column>
+		<column>name</column>
+		<column>description</column>
+		
+		<row>
+			<value>1</value>
+			<value>Groovy Programming</value>
+			<value>Essentials or groovy programming</value>
+		</row>
+	</table>
+
+	<table name="STUDENT">
+		<column>id</column>
+		<column>name</column>
+		<column>born_date</column>
+
+		<row>
+			<value>1</value>
+			<value>Fernando</value>
+			<value>1985-12-26</value>
+		</row>
+	</table>
+	
+	<table name="COURSE_STUDENT">
+		<column>course_id</column>
+		<column>student_id</column>
+
+		<row>
+			<value>1</value>
+			<value>1</value>
+		</row>
+	</table>
+
+</dataset>

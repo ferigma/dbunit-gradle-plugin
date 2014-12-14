@@ -1,0 +1,90 @@
+// PROPERTIES
+
+ext {
+   dbunitVersion = '2.5.0'
+   junitVersion = '4.10'
+   h2Version = '1.4.179'
+}
+
+// PROJECT
+
+group = 'com.ferigma'
+version = '0.1.0'
+
+// PLUGINS
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'eclipse-wtp'
+
+// REPOSITORIES
+
+repositories {
+   mavenLocal()
+   mavenCentral()
+}
+
+// DEPENDENCIES
+
+dependencies {
+   compile gradleApi()
+   compile localGroovy()
+   compile "org.dbunit:dbunit:$dbunitVersion"
+
+   testCompile "junit:junit:$junitVersion"
+   testCompile "com.h2database:h2:$h2Version"
+}
+
+// PUBLISHING
+
+publishing {
+   publications {
+      mavenJava(MavenPublication) {
+         from components.java
+
+         artifact sourceJar
+         artifact groovydocJar
+
+         pom.withXml {
+            def root = asNode()
+            root.appendNode('name', 'DbUnit Gradle Plugin')
+            root.appendNode('description', 'Execute DbUnit tasks from Gradle projects.')
+            root.appendNode('url', 'https://github.com/ferigma/dbunit-gradle-plugin')
+            root.appendNode('inceptionYear', '2014')
+
+            def scm = root.appendNode('scm')
+            scm.appendNode('url', 'https://github.com/ferigma/dbunit-gradle-plugin')
+            scm.appendNode('connection', 'scm:https://ferigma@github.com/ferigma/dbunit-gradle-plugin.git')
+            scm.appendNode('developerConnection', 'scm:git://github.com/ferigma/dbunit-gradle-plugin.git')
+
+            def license = root.appendNode('licenses').appendNode('license')
+            license.appendNode('name', 'The MIT License (MIT)')
+            license.appendNode('url', 'https://github.com/ferigma/dbunit-gradle-plugin/blob/master/LICENSE')
+            license.appendNode('distribution', 'repo')
+
+            def developers = root.appendNode('developers')
+            def ferigma = developers.appendNode('developer')
+            ferigma.appendNode('id', 'ferigma')
+            ferigma.appendNode('name', 'Fernando Iglesias Martinez')
+            ferigma.appendNode('email', 'fernandoiglesiasmartinez@gmail.com')
+         }
+      }
+   }
+}
+
+task sourceJar(type: Jar) {
+   classifier 'source'
+   from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+   classifier 'groovydoc'
+   from 'build/docs/groovydoc'
+}
+
+// WRAPPER
+
+task wrapper(type: Wrapper) {
+   description 'Generates gradle wrapper'
+   gradleVersion = '2.0'
+}
