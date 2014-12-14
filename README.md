@@ -12,12 +12,10 @@ There are three tasks included in the plugin:
 
 ## Getting started
 
-1. Install the `dbunit-gradle-plugin` (in your local Maven repository, for example):
- ```groovy
- gradle publishToMavenLocal
- ```
-2. Inside the `build.gradle` file of your current project include the plugin and the library with the database driver:
+1. Install the `dbunit-gradle-plugin` (in your local Maven repository, for example): `gradle publishToMavenLocal`
 
+2. Inside the `build.gradle` file of your current project include the plugin and the library with the database driver:
+ 
  ```groovy
  buildscript {
     repositories {
@@ -32,7 +30,6 @@ There are three tasks included in the plugin:
  ```
 
 3. Apply the plugin wherever you want using the DSL gradle syntax. Example:
-
  - Create a new task that populates your DB, executing the operation `CLEAN_INSERT` and using the file `$rootFir/db/sample-data.xml`:
 
   ```groovy
