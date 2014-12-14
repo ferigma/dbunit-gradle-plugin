@@ -1,0 +1,8 @@
+/build/
+/.groovy/
+/.settings/
+/bin/
+/.gradle/
+.project
+.DS_Store
+.classpath
