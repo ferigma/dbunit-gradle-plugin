@@ -129,4 +129,9 @@ class DbunitGradlePluginTest {
       operationTask.execute()
       exportTask.execute()
    }
+
+   @Test
+   void pluginAddsExtension() {
+      assert project.extensions.findByName('dbunit')
+   }
 }
