@@ -40,10 +40,18 @@ class DbunitGradlePlugin implements Plugin<Project> {
       // Project Description
       target.description = "DbUnit Gradle Plugin"
 
-      // Tasks
+      registerExtensions(target)
+      registerTasks(target)
+
+   }
+
+   private DbunitPluginExtension registerExtensions(Project target) {
+      target.extensions.create('dbunit', DbunitPluginExtension)
+   }
+
+   private void registerTasks(Project target) {
       target.task('compare', type: CompareTask)
       target.task('export', type: ExportTask)
       target.task('operation', type: OperationTask)
-
    }
 }
