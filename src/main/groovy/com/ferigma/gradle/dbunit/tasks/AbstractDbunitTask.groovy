@@ -20,13 +20,9 @@ import com.ferigma.gradle.dbunit.DbunitGradlePlugin
  * Base class for all DBUnit plugin tasks.
  *
  * @author Fernando Iglesias Martinez
+ * @author Sion Williams
  */
 abstract class AbstractDbunitTask extends DefaultTask {
-
-   static final String DEFAULT_DATA_TYPE_FACTORY_NAME =
-   "org.dbunit.dataset.datatype.DefaultDataTypeFactory"
-   static final String DEFAULT_METADA_HANDLER_NAME =
-   "org.dbunit.database.DefaultMetadataHandler"
 
    static final String PROPERTY_USER = "user"
    static final String PROPERTY_PASSWORD = "password"
@@ -58,12 +54,12 @@ abstract class AbstractDbunitTask extends DefaultTask {
     */
    @Input
    @Optional
-   String dataTypeFactoryName = DEFAULT_DATA_TYPE_FACTORY_NAME
+   String dataTypeFactoryName
 
    /** Enable or disable usage of JDBC batched statement by DbUnit */
    @Input
    @Optional
-   boolean supportBatchStatement = false
+   boolean supportBatchStatement
 
    /**
     * Enable or disable multiple schemas support by prefixing table names with
@@ -71,7 +67,7 @@ abstract class AbstractDbunitTask extends DefaultTask {
     */
    @Input
    @Optional
-   boolean useQualifiedTableNames = false
+   boolean useQualifiedTableNames
 
    /**
     * Enable or disable the warning message displayed when DbUnit encounter an
@@ -79,7 +75,7 @@ abstract class AbstractDbunitTask extends DefaultTask {
     */
    @Input
    @Optional
-   boolean datatypeWarning = false
+   boolean datatypeWarning
 
    /** escapePattern */
    @Input
@@ -89,7 +85,7 @@ abstract class AbstractDbunitTask extends DefaultTask {
    /** skipOracleRecycleBinTables */
    @Input
    @Optional
-   boolean skipOracleRecycleBinTables = false
+   boolean skipOracleRecycleBinTables
 
    /**
     * Skip the execution when true, very handy when using together with
@@ -97,17 +93,17 @@ abstract class AbstractDbunitTask extends DefaultTask {
     */
    @Input
    @Optional
-   boolean skip = false
+   boolean skip
 
    /** Class name of metadata handler. */
    @Input
    @Optional
-   String metadataHandlerName = DEFAULT_METADA_HANDLER_NAME
+   String metadataHandlerName
 
    /** Be case sensitive when handling tables. */
    @Input
    @Optional
-   boolean caseSensitiveTableNames = false
+   boolean caseSensitiveTableNames
 
    IDatabaseConnection connection
 
@@ -125,33 +121,33 @@ abstract class AbstractDbunitTask extends DefaultTask {
 
          // Connection properties
          Properties properties = new Properties()
-         properties.put(PROPERTY_USER, username)
-         properties.put(PROPERTY_PASSWORD, password)
+         properties.put(PROPERTY_USER, getUsername())
+         properties.put(PROPERTY_PASSWORD, getPassword())
 
          // Database driver
-         Driver driver = (Driver) Class.forName(driver).newInstance()
-         Connection driverConnection = driver.connect(url, properties)
+         Driver driver = (Driver) Class.forName(getDriver()).newInstance()
+         Connection driverConnection = driver.connect(getUrl(), properties)
          driverConnection.setAutoCommit(true)
 
          // Database connection
-         connection = new DatabaseConnection(driverConnection, schema)
+         connection = new DatabaseConnection(driverConnection, getSchema())
          DatabaseConfig config = connection.getConfig()
 
          // Connection configuration
-         config.setProperty(DatabaseConfig.FEATURE_BATCHED_STATEMENTS, supportBatchStatement)
-         config.setProperty(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES, useQualifiedTableNames)
-         config.setProperty(DatabaseConfig.FEATURE_DATATYPE_WARNING, datatypeWarning)
-         config.setProperty(DatabaseConfig.FEATURE_SKIP_ORACLE_RECYCLEBIN_TABLES, skipOracleRecycleBinTables)
-         config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, caseSensitiveTableNames)
-         config.setProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN, escapePattern)
+         config.setProperty(DatabaseConfig.FEATURE_BATCHED_STATEMENTS, getSupportBatchStatement())
+         config.setProperty(DatabaseConfig.FEATURE_QUALIFIED_TABLE_NAMES, getUseQualifiedTableNames())
+         config.setProperty(DatabaseConfig.FEATURE_DATATYPE_WARNING, getDatatypeWarning())
+         config.setProperty(DatabaseConfig.FEATURE_SKIP_ORACLE_RECYCLEBIN_TABLES, getSkipOracleRecycleBinTables())
+         config.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, getCaseSensitiveTableNames())
+         config.setProperty(DatabaseConfig.PROPERTY_ESCAPE_PATTERN, getEscapePattern())
          config.setProperty(DatabaseConfig.PROPERTY_RESULTSET_TABLE_FACTORY, new ForwardOnlyResultSetTableFactory())
 
          // Setup data type factory
-         IDataTypeFactory dataTypeFactory = (IDataTypeFactory) Class.forName(dataTypeFactoryName).newInstance()
+         IDataTypeFactory dataTypeFactory = (IDataTypeFactory) Class.forName(getDataTypeFactoryName()).newInstance()
          config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, dataTypeFactory)
 
          // Setup metadata handler
-         IMetadataHandler metadataHandler = (IMetadataHandler) Class.forName(metadataHandlerName).newInstance()
+         IMetadataHandler metadataHandler = (IMetadataHandler) Class.forName(getMetadataHandlerName()).newInstance()
          config.setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, metadataHandler)
 
          // Do concrete task
