@@ -66,13 +66,16 @@ class DbunitGradlePluginTest {
       project = ProjectBuilder.builder().build()
       project.apply plugin: 'dbunit'
 
-      // Operation Task (CLEAN_INSERT)
-      operationTask = project.tasks.operation {
+      project.dbunit {
          username = DB_USERNAME
          password = DB_PASSWORD
          url = DB_URL
          driver = DB_DRIVER
          dataTypeFactoryName = DATA_TYPE_FACTORY
+      }
+
+      // Operation Task (CLEAN_INSERT)
+      operationTask = project.tasks.operation {
          sources = [
             new OperationSource(transaction: true, type: "CLEAN_INSERT",
             format: "xml", file: "build/resources/test/sample-data.xml")
@@ -81,11 +84,6 @@ class DbunitGradlePluginTest {
 
       // CompareTask
       compareTask = project.tasks.compare {
-         username = DB_USERNAME
-         password = DB_PASSWORD
-         url = DB_URL
-         driver = DB_DRIVER
-         dataTypeFactoryName = DATA_TYPE_FACTORY
          sources = [
             new CompareSource(format: "xml",
             file: "build/resources/test/sample-data.xml")
@@ -94,11 +92,6 @@ class DbunitGradlePluginTest {
 
       // ExportTask
       exportTask = project.tasks.export {
-         username = DB_USERNAME
-         password = DB_PASSWORD
-         url = DB_URL
-         driver = DB_DRIVER
-         dataTypeFactoryName = DATA_TYPE_FACTORY
          sources = [
             new ExportSource(format: "xml",
             destination: "build/test-results/result-data.xml")
