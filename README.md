@@ -35,12 +35,15 @@ There are three tasks included in the plugin:
  - Create a new task that populates your DB, executing the operation `CLEAN_INSERT` and using the file `$rootFir/db/sample-data.xml`:
 
   ```groovy
-  task populateTestDb(type: com.ferigma.gradle.dbunit.tasks.OperationTask) {
+  dbunit {
      username = "sa"
      password = "sa"
      url = "jdbc:h2:/tmp/h2_test"
      driver = "org.h2.Driver"
      dataTypeFactoryName = "org.dbunit.ext.h2.H2DataTypeFactory"
+  }
+
+  task populateTestDb(type: com.ferigma.gradle.dbunit.tasks.OperationTask) {
      sources = [
         new com.ferigma.gradle.dbunit.tasks.vo.OperationSource(
         transaction: true, type: "CLEAN_INSERT", format: "xml",

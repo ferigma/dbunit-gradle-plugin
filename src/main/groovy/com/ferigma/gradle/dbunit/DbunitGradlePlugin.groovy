@@ -1,5 +1,7 @@
 package com.ferigma.gradle.dbunit
 
+import com.ferigma.gradle.dbunit.tasks.AbstractDbunitTask
+import org.gradle.api.DomainObjectCollection
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -22,6 +24,7 @@ import com.ferigma.gradle.dbunit.tasks.OperationTask
  * </ul>
  *
  * @author Fernando Iglesias Martinez
+ * @author Sion Williams
  * @see http://dbunit.sourceforge.net
  * @see http://mojo.codehaus.org/dbunit-maven-plugin
  * @see http://github.com/ferigma/dbunit-gradle-plugin
@@ -40,10 +43,46 @@ class DbunitGradlePlugin implements Plugin<Project> {
       // Project Description
       target.description = "DbUnit Gradle Plugin"
 
-      // Tasks
+      registerDbunitExtensions(target)
+      applyConventionMappingToDbunitTasks(target)
+      registerTasks(target)
+
+   }
+
+   private DbunitPluginExtension registerDbunitExtensions(Project target) {
+      target.extensions.create('dbunit', DbunitPluginExtension)
+   }
+
+   /**
+    * assign the values from the extension object properties to the task properties with a closure.
+    * This means the value of the properties are lazy set: only when the task gets executed the task
+    * property values are calculated.
+    * @param target
+     */
+   private void applyConventionMappingToDbunitTasks(Project target) {
+      def dbunitExtension = target.extensions.findByName('dbunit')
+
+      target.tasks.withType(AbstractDbunitTask) {
+         conventionMapping.driver = { dbunitExtension.driver }
+         conventionMapping.username = { dbunitExtension.username }
+         conventionMapping.password = { dbunitExtension.password }
+         conventionMapping.url = { dbunitExtension.url }
+         conventionMapping.schema = { dbunitExtension.schema }
+         conventionMapping.dataTypeFactoryName = { dbunitExtension.dataTypeFactoryName }
+         conventionMapping.supportBatchStatement = { dbunitExtension.supportBatchStatement }
+         conventionMapping.useQualifiedTableNames = { dbunitExtension.useQualifiedTableNames }
+         conventionMapping.datatypeWarning = { dbunitExtension.datatypeWarning }
+         conventionMapping.escapePattern = { dbunitExtension.escapePattern }
+         conventionMapping.skipOracleRecycleBinTables = { dbunitExtension.skipOracleRecycleBinTables }
+         conventionMapping.skip = { dbunitExtension.skip }
+         conventionMapping.metadataHandlerName = { dbunitExtension.metadataHandlerName }
+         conventionMapping.caseSensitiveTableNames = { dbunitExtension.caseSensitiveTableNames }
+      }
+   }
+
+   private void registerTasks(Project target) {
       target.task('compare', type: CompareTask)
       target.task('export', type: ExportTask)
       target.task('operation', type: OperationTask)
-
    }
 }
